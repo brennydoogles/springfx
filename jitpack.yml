@@ -1,0 +1,5 @@
+# JitPack builds a release from each git tag (ADR-0001). Pin the JDK the project targets.
+jdk:
+  - openjdk25
+install:
+  - ./mvnw -B install -DskipTests
