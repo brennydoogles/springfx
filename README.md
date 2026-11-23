@@ -2,7 +2,7 @@
 
 Bind Spring Boot and JavaFX together: one application class, Controllers that own their FXML, a Window Manager for everything outside FXML, and Window Settings with sensible defaults.
 
-> **Status: early development.** Launching an app, showing its Primary View and opening further Windows through the Window Manager work; the compile-time checks are still to come. The design is recorded in [`GLOSSARY.md`](GLOSSARY.md) and [`docs/adr/`](docs/adr/); the work is tracked in [issues](https://github.com/brennydoogles/springfx/issues).
+> **Status: early development.** Launching an app, showing its Primary View, opening further Windows through the Window Manager, and the compile-time checks work, but none of it is in a release yet. The design is recorded in [`GLOSSARY.md`](GLOSSARY.md) and [`docs/adr/`](docs/adr/); the work is tracked in [issues](https://github.com/brennydoogles/springfx/issues).
 
 ## Usage
 
@@ -131,9 +131,21 @@ From JDK 23, annotation processors on the class path aren't run automatically, s
                 <version>v0.1.0</version>
             </path>
         </annotationProcessorPaths>
+        <compilerArgs>
+            <arg>-Aspringfx.resources=${project.basedir}/src/main/resources</arg>
+        </compilerArgs>
     </configuration>
 </plugin>
 ```
+
+The processor makes these compile errors, reported on the Controller's `@SpringFXController`:
+
+- the FXML file it names doesn't exist
+- the FXML's `fx:controller` names a different class (leaving `fx:controller` out is fine)
+- more than one Controller is `primary = true`
+- the module has a `SpringFXApplication` subclass but no primary Controller
+
+`-Aspringfx.resources` tells it where your FXML lives; separate several folders with the platform path separator. Without it, the processor reads FXML from the class output, which works in a Maven build (resources are copied before compiling) but can miss files an IDE hasn't copied yet. It reads only each file's root element. To keep the primary-Controller checks right in an IDE's incremental builds, which recompile only changed files, it records the primary Controller in `META-INF/springfx/primary-controllers` in the class output.
 
 Replace `v0.1.0` with the tag you want; the [JitPack page](https://jitpack.io/#brennydoogles/springfx) lists them.
 
