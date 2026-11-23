@@ -35,7 +35,64 @@ springfx.window.width=900
 springfx.window.height=600
 ```
 
-Artifacts will be published through [JitPack](https://jitpack.io/#brennydoogles/springfx) from release tags.
+## Adding SpringFX to a build
+
+SpringFX is published through [JitPack](https://jitpack.io/#brennydoogles/springfx) from release tags, as `com.github.brennydoogles.springfx:<module>:<tag>`. It needs Java 25 and is built against Spring Boot 4.2.0; JavaFX comes in with the dependency.
+
+Add the JitPack repository. It has to be a plugin repository as well, because the annotation processor is resolved from it:
+
+```xml
+<repositories>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </repository>
+</repositories>
+<pluginRepositories>
+    <pluginRepository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </pluginRepository>
+</pluginRepositories>
+```
+
+Add the runtime library:
+
+```xml
+<dependency>
+    <groupId>com.github.brennydoogles.springfx</groupId>
+    <artifactId>springfx</artifactId>
+    <version>v0.1.0</version>
+</dependency>
+```
+
+From JDK 23, annotation processors on the class path aren't run automatically, so list `springfx-processor` under the compiler's `annotationProcessorPaths` ([ADR-0003](docs/adr/0003-controllers-declare-their-fxml-checked-at-compile-time.md)). If you use other processors, such as Lombok or `spring-boot-configuration-processor`, list them here too, because this list replaces discovery:
+
+```xml
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-compiler-plugin</artifactId>
+    <configuration>
+        <annotationProcessorPaths>
+            <path>
+                <groupId>com.github.brennydoogles.springfx</groupId>
+                <artifactId>springfx-processor</artifactId>
+                <version>v0.1.0</version>
+            </path>
+        </annotationProcessorPaths>
+    </configuration>
+</plugin>
+```
+
+Replace `v0.1.0` with the tag you want; the [JitPack page](https://jitpack.io/#brennydoogles/springfx) lists them.
+
+## Building
+
+```bash
+./mvnw verify
+```
+
+The build has two modules: `springfx`, the runtime library, and `springfx-processor`, its compile-time checks. Releases are git tags, which JitPack builds using `jitpack.yml`.
 
 ## Licence
 
