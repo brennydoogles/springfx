@@ -12,11 +12,7 @@ import lombok.Builder;
  * WindowOptions.builder().owner(stage).modality(Modality.WINDOW_MODAL).title("Settings").build()
  * }</pre>
  *
- * <p>or start from {@link #defaults()} and change what you need:
- *
- * <pre>{@code
- * WindowOptions.defaults().withOwner(stage).withModality(Modality.WINDOW_MODAL).withTitle("Settings")
- * }</pre>
+ * <p>To change existing options, use {@link #toBuilder()}.
  *
  * @param owner the Window that owns the new one, or null for none
  * @param modality the new Window's modality, or null for {@link Modality#NONE}
@@ -39,25 +35,5 @@ public record WindowOptions(Window owner, Modality modality, String title, Doubl
     /** No owner, not modal, the default title and the View's preferred size. */
     public static WindowOptions defaults() {
         return DEFAULTS;
-    }
-
-    /** These options with the given owner. */
-    public WindowOptions withOwner(Window owner) {
-        return new WindowOptions(owner, modality, title, width, height);
-    }
-
-    /** These options with the given modality. */
-    public WindowOptions withModality(Modality modality) {
-        return new WindowOptions(owner, modality, title, width, height);
-    }
-
-    /** These options with the given title. */
-    public WindowOptions withTitle(String title) {
-        return new WindowOptions(owner, modality, title, width, height);
-    }
-
-    /** These options with the given content size. */
-    public WindowOptions withSize(double width, double height) {
-        return new WindowOptions(owner, modality, title, width, height);
     }
 }

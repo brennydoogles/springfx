@@ -12,6 +12,7 @@ SpringFX binds Spring Boot and JavaFX together. It is a library meant to be cons
 
 - **One top-level Java class per file.** Nest a class only when there's a specific reason, such as nested properties inside a Spring `@ConfigurationProperties` class.
 - **All configurable properties go through Spring Boot `@ConfigurationProperties`**, with sensible defaults so an app works with no configuration. Don't use `@Value` or read `Environment` directly.
+- **Option and value classes get a Lombok builder** (`@Builder(toBuilder = true)`), not hand-written `with*` methods or telescoping constructors. Change existing values with `toBuilder()`. Lombok is compile-only (`provided`, optional), so consumers never get it.
 - **Never start the JavaFX toolkit outside `SpringFXApplication.launch`.** Beans must be creatable in a plain `@SpringBootTest` without a display.
 - **Public API is deliberate.** Anything public in `com.brendondugan.springfx` is a promise to consumers; keep internals package-private or in an `internal` package.
 

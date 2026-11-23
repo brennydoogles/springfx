@@ -116,7 +116,7 @@ class FxWindowManagerDisplayTest {
     @Test
     void titlesComeFromTheOptionsThenTheControllerThenTheWindowSettings() {
         run((context, windows) -> {
-            assertThat(fx(windows.open(ParentController.class, WindowOptions.defaults().withTitle("Asked for"))::getTitle))
+            assertThat(fx(windows.open(ParentController.class, WindowOptions.builder().title("Asked for").build())::getTitle))
                     .isEqualTo("Asked for");
             assertThat(fx(windows.open(ParentController.class)::getTitle)).isEqualTo("Parent title");
             assertThat(fx(windows.open(RecordingController.class)::getTitle)).isEqualTo("Configured title");
@@ -142,7 +142,7 @@ class FxWindowManagerDisplayTest {
         run((context, windows) -> {
             Stage primary = windows.primaryStage();
             Stage preferred = windows.open(RecordingController.class);
-            Stage sized = windows.open(RecordingController.class, WindowOptions.defaults().withSize(400, 300));
+            Stage sized = windows.open(RecordingController.class, WindowOptions.builder().width(400.0).height(300.0).build());
 
             assertThat(fx(() -> primary.getScene().getWidth())).isEqualTo(700);
             assertThat(fx(() -> primary.getScene().getHeight())).isEqualTo(500);
