@@ -15,7 +15,7 @@
     <!-- JitPack publishes multi-module builds as com.github.<user>.<repo>:<module>:<tag> (ADR-0001). -->
     <groupId>com.github.brennydoogles.springfx</groupId>
     <artifactId>springfx-parent</artifactId>
-    <version>0.1.0</version>
+    <version>0.2.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>SpringFX Parent</name>
