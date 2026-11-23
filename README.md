@@ -2,9 +2,9 @@
 
 Bind Spring Boot and JavaFX together: one application class, Controllers that own their FXML, a Window Manager for everything outside FXML, and Window Settings with sensible defaults.
 
-> **Status: design stage.** Nothing is released yet. The design is recorded in [`GLOSSARY.md`](GLOSSARY.md) and [`docs/adr/`](docs/adr/); the work is tracked in [issues](https://github.com/brennydoogles/springfx/issues).
+> **Status: early development.** Launching an app and showing its Primary View works; the Window Manager and the compile-time checks are still to come. The design is recorded in [`GLOSSARY.md`](GLOSSARY.md) and [`docs/adr/`](docs/adr/); the work is tracked in [issues](https://github.com/brennydoogles/springfx/issues).
 
-## Planned usage
+## Usage
 
 ```java
 @SpringBootApplication
@@ -29,11 +29,30 @@ public class MainController {
 }
 ```
 
+(`WindowManager` arrives with [#4](https://github.com/brennydoogles/springfx/issues/4).)
+
+`launch` starts Spring and JavaFX together and shows the primary Controller's View in the Primary Window; closing that Window ends the app. `MyApp` doesn't extend JavaFX `Application`, so it works as the main class of a fat jar.
+
+A Controller is a prototype-scoped Spring bean that names its FXML. The FXML may declare `fx:controller` for SceneBuilder, but then it must name the Controller class. Controllers of nested `<fx:include>`s are Spring beans too. Exactly one Controller is `primary`; `title` overrides the Window title for that View.
+
+Window Settings work with no configuration. These are the defaults:
+
 ```properties
-springfx.window.title=My App
+# Unset: spring.application.name, else "Application"
+springfx.window.title=
 springfx.window.width=900
 springfx.window.height=600
+springfx.window.min-width=0
+springfx.window.min-height=0
+springfx.window.resizable=true
+springfx.window.maximized=false
+springfx.window.full-screen=false
+# Class-path resources or URLs, for every Window
+springfx.window.stylesheets=
+springfx.window.icons=
 ```
+
+Size and state apply to the Primary Window; stylesheets and icons apply to every Window.
 
 ## Adding SpringFX to a build
 

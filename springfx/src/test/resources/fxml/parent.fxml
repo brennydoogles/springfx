@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.VBox?>
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
+    <fx:include fx:id="child" source="child.fxml"/>
+    <fx:include fx:id="other" source="other.fxml"/>
+</VBox>
