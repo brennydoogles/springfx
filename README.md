@@ -29,7 +29,7 @@ Add the runtime library:
 <dependency>
     <groupId>com.github.brennydoogles.springfx</groupId>
     <artifactId>springfx</artifactId>
-    <version>v0.1.0</version>
+    <version>v0.2.0</version>
 </dependency>
 ```
 
@@ -44,7 +44,7 @@ Add the compile-time checks. From JDK 23, annotation processors on the class pat
             <path>
                 <groupId>com.github.brennydoogles.springfx</groupId>
                 <artifactId>springfx-processor</artifactId>
-                <version>v0.1.0</version>
+                <version>v0.2.0</version>
             </path>
         </annotationProcessorPaths>
         <compilerArgs>
@@ -54,7 +54,7 @@ Add the compile-time checks. From JDK 23, annotation processors on the class pat
 </plugin>
 ```
 
-Replace `v0.1.0` with the tag you want; the [JitPack page](https://jitpack.io/#brennydoogles/springfx) lists them. For a runnable fat jar, add `spring-boot-maven-plugin` as usual.
+Replace `v0.2.0` with the tag you want; the [JitPack page](https://jitpack.io/#brennydoogles/springfx) lists them. For a runnable fat jar, add `spring-boot-maven-plugin` as usual.
 
 ## 2. Write the application class
 
