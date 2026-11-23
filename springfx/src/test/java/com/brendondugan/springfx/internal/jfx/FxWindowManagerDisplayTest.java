@@ -106,7 +106,7 @@ class FxWindowManagerDisplayTest {
             Stage primary = windows.primaryStage();
 
             Stage dialog = windows.open(RecordingController.class,
-                    WindowOptions.defaults().withOwner(primary).withModality(Modality.WINDOW_MODAL));
+                    WindowOptions.builder().owner(primary).modality(Modality.WINDOW_MODAL).build());
 
             assertThat(fx(dialog::getOwner)).isSameAs(primary);
             assertThat(fx(dialog::getModality)).isEqualTo(Modality.WINDOW_MODAL);

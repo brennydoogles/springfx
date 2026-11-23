@@ -18,9 +18,10 @@ import javafx.stage.Stage;
  *
  *     @FXML
  *     private void onSettings() {
- *         windows.open(SettingsController.class, WindowOptions.defaults()
- *                 .withOwner(windows.stageOf(this))
- *                 .withModality(Modality.WINDOW_MODAL));
+ *         windows.open(SettingsController.class, WindowOptions.builder()
+ *                 .owner(windows.stageOf(this))
+ *                 .modality(Modality.WINDOW_MODAL)
+ *                 .build());
  *     }
  * }
  * }</pre>
