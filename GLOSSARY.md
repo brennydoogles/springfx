@@ -12,6 +12,10 @@ _Avoid_: launcher, FX application, bootstrap class
 One piece of user interface defined by an FXML file together with its Controller.
 _Avoid_: screen, page, scene, form
 
+**View Name**:
+The short name, chosen by the developer, that code uses to refer to a View, such as `LOGIN_PAGE`. Every View has exactly one, unique within the app.
+_Avoid_: friendly name, view key, view id, bean name
+
 **Controller**:
 The Spring-managed object behind a View. A Controller names its View's FXML file, not the other way round, and a fresh Controller is made each time its View is shown.
 _Avoid_: view controller, presenter, handler
