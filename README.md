@@ -39,7 +39,7 @@ springfx.window.height=600
 
 SpringFX is published through [JitPack](https://jitpack.io/#brennydoogles/springfx) from release tags, as `com.github.brennydoogles.springfx:<module>:<tag>`. It needs Java 25 and is built against Spring Boot 4.2.0; JavaFX comes in with the dependency.
 
-Add the JitPack repository. It has to be a plugin repository as well, because the annotation processor is resolved from it:
+Add the JitPack repository. The compiler plugin resolves `annotationProcessorPaths` from these repositories too, so this one entry covers the processor:
 
 ```xml
 <repositories>
@@ -48,12 +48,6 @@ Add the JitPack repository. It has to be a plugin repository as well, because th
         <url>https://jitpack.io</url>
     </repository>
 </repositories>
-<pluginRepositories>
-    <pluginRepository>
-        <id>jitpack.io</id>
-        <url>https://jitpack.io</url>
-    </pluginRepository>
-</pluginRepositories>
 ```
 
 Add the runtime library:
