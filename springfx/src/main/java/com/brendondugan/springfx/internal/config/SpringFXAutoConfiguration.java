@@ -2,9 +2,10 @@ package com.brendondugan.springfx.internal.config;
 
 import com.brendondugan.springfx.WindowSettings;
 import com.brendondugan.springfx.internal.jfx.FxApplication;
-import com.brendondugan.springfx.internal.jfx.PrimaryWindow;
+import com.brendondugan.springfx.internal.jfx.FxWindowManager;
 import com.brendondugan.springfx.internal.jfx.ViewLoader;
 import com.brendondugan.springfx.internal.spring.ControllerRegistry;
+import javafx.application.Platform;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
@@ -29,8 +30,13 @@ public class SpringFXAutoConfiguration {
     }
 
     @Bean
-    PrimaryWindow springFXPrimaryWindow(ViewLoader viewLoader, WindowSettings settings,
+    WindowSettingsResolver springFXWindowSettingsResolver(WindowSettings settings,
             ApplicationNameProperties application) {
-        return new PrimaryWindow(viewLoader, settings, application);
+        return new WindowSettingsResolver(settings, application);
+    }
+
+    @Bean
+    FxWindowManager springFXWindowManager(ViewLoader viewLoader, WindowSettingsResolver resolver) {
+        return new FxWindowManager(viewLoader, resolver, Platform::exit);
     }
 }

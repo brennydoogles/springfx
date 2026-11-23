@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -66,11 +68,14 @@ public class ViewLoader {
         if (declared == null) {
             loader.setController(controller);
         }
+        List<Object> nested = new ArrayList<>();
         loader.setControllerFactory(type -> {
             if (type == controllerType && rootControllerSupplied.compareAndSet(false, true)) {
                 return controller;
             }
-            return nestedController(type);
+            Object nestedController = nestedController(type);
+            nested.add(nestedController);
+            return nestedController;
         });
 
         Parent root;
@@ -86,7 +91,7 @@ public class ViewLoader {
                     + (used == null ? "no Controller" : "a " + used.getClass().getName() + " SpringFX did not create")
                     + " instead of the Spring-created Controller " + controllerType.getName());
         }
-        return new LoadedView(root, controller, annotation.title());
+        return new LoadedView(root, controller, List.copyOf(nested), annotation.title());
     }
 
     /** A nested Controller: the Spring bean of that type, or a new autowired instance if there is none. */

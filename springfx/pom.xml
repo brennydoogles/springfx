@@ -45,6 +45,22 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <argLine>--enable-native-access=ALL-UNNAMED</argLine>
+                </configuration>
+                <executions>
+                    <execution>
+                        <!-- Tests tagged "display" open real Windows; they run only with -Pdisplay. -->
+                        <id>default-test</id>
+                        <configuration>
+                            <excludedGroups>display</excludedGroups>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
                     <!-- From JDK 23, processors on the class path aren't run unless listed. -->
@@ -58,4 +74,32 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <!-- Also run the tests that need a display: ./mvnw verify -Pdisplay -->
+            <!-- A separate execution, so these run in their own JVM and the toolkit they start
+                 can't leak into the headless tests. -->
+            <id>display</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>display-test</id>
+                                <goals>
+                                    <goal>test</goal>
+                                </goals>
+                                <configuration>
+                                    <groups>display</groups>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
