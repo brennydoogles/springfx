@@ -73,10 +73,12 @@ public class SettingsController {
 }
 
 // In MainController: open Settings as a dialog owned by the main Window.
-windows.open(SettingsController.class, WindowOptions.defaults()
-        .withOwner(windows.stageOf(this))
-        .withModality(Modality.WINDOW_MODAL)
-        .withSize(480, 320));
+windows.open(SettingsController.class, WindowOptions.builder()
+        .owner(windows.stageOf(this))
+        .modality(Modality.WINDOW_MODAL)
+        .width(480.0)
+        .height(320.0)
+        .build());
 ```
 
 | Method | Does |
@@ -86,7 +88,7 @@ windows.open(SettingsController.class, WindowOptions.defaults()
 | `stageOf(controller)` | The Window a Controller's View is in, including the Controllers of nested `<fx:include>`s |
 | `close(controller)` | Closes that Controller's Window. Closing the Primary Window ends the app, even if other Windows are open. |
 
-`WindowOptions` sets an opened Window's owner, modality, title and size. Its title wins over the Controller's `title`, which wins over `springfx.window.title`. Without a size, the Window takes its View's preferred size; the Window Settings' size and state apply only to the Primary Window.
+`WindowOptions` sets an opened Window's owner, modality, title and size. Build one with `WindowOptions.builder()`, or start from `WindowOptions.defaults()` and change options with `withOwner`, `withModality`, `withTitle` and `withSize`. Its title wins over the Controller's `title`, which wins over `springfx.window.title`. Without a size, the Window takes its View's preferred size; the Window Settings' size and state apply only to the Primary Window.
 
 Every method can be called from any thread. Calls off the JavaFX application thread run on it; the methods that return a value wait for it, and `close` doesn't.
 
