@@ -1,4 +1,4 @@
-package com.brendondugan.springfx.internal;
+package com.brendondugan.springfx.internal.spring;
 
 import com.brendondugan.springfx.SpringFXController;
 import org.springframework.beans.factory.ListableBeanFactory;
@@ -8,11 +8,11 @@ import java.util.Arrays;
 import java.util.List;
 
 /** Finds the app's Controllers from their bean definitions, without creating any of them. */
-class ControllerRegistry {
+public class ControllerRegistry {
 
     private final ListableBeanFactory beans;
 
-    ControllerRegistry(ListableBeanFactory beans) {
+    public ControllerRegistry(ListableBeanFactory beans) {
         this.beans = beans;
     }
 
@@ -21,7 +21,7 @@ class ControllerRegistry {
      *
      * @throws IllegalStateException unless exactly one Controller is marked primary
      */
-    Class<?> primaryController() {
+    public Class<?> primaryController() {
         List<Class<?>> primaries = Arrays.stream(beans.getBeanNamesForAnnotation(SpringFXController.class))
                 .filter(name -> beans.findAnnotationOnBean(name, SpringFXController.class).primary())
                 .<Class<?>>map(name -> ClassUtils.getUserClass(beans.getType(name)))

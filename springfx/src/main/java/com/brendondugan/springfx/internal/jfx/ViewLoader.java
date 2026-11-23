@@ -1,4 +1,4 @@
-package com.brendondugan.springfx.internal;
+package com.brendondugan.springfx.internal.jfx;
 
 import com.brendondugan.springfx.SpringFXController;
 import javafx.fxml.FXMLLoader;
@@ -20,13 +20,13 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * Loads a View from its Controller's FXML. The Controller is created by Spring, and so is every
  * Controller of a nested {@code <fx:include>}.
  */
-class ViewLoader {
+public class ViewLoader {
 
     private static final String FXML_NAMESPACE = "http://javafx.com/fxml";
 
     private final ApplicationContext context;
 
-    ViewLoader(ApplicationContext context) {
+    public ViewLoader(ApplicationContext context) {
         this.context = context;
     }
 

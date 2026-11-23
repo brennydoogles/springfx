@@ -1,4 +1,4 @@
-package com.brendondugan.springfx.internal;
+package com.brendondugan.springfx.internal.jfx;
 
 /** The Controller of a nested {@code <fx:include>}, registered as a Spring bean. */
 class ChildController {

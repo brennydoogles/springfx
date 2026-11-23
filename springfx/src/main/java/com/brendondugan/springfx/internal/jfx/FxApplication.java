@@ -1,5 +1,6 @@
-package com.brendondugan.springfx.internal;
+package com.brendondugan.springfx.internal.jfx;
 
+import com.brendondugan.springfx.internal.spring.ControllerRegistry;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
