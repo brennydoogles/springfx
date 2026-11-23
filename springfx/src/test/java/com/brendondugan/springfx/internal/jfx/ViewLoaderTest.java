@@ -66,6 +66,16 @@ class ViewLoaderTest {
     }
 
     @Test
+    void reportsTheNestedControllers() {
+        runner.run(context -> {
+            LoadedView view = context.getBean(ViewLoader.class).load(ParentController.class);
+            ParentController parent = (ParentController) view.controller();
+
+            assertThat(view.nestedControllers()).containsExactly(parent.childController, parent.otherController);
+        });
+    }
+
+    @Test
     void carriesTheControllersTitle() {
         runner.run(context -> assertThat(context.getBean(ViewLoader.class).load(ParentController.class).title())
                 .isEqualTo("Parent title"));

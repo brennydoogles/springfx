@@ -56,7 +56,7 @@ public final class FxApplication extends Application {
             return;
         }
         try {
-            context.getBean(PrimaryWindow.class).show(stage, primaryController);
+            context.getBean(FxWindowManager.class).showPrimary(stage, primaryController);
         } catch (RuntimeException e) {
             fail(e);
             Platform.exit();

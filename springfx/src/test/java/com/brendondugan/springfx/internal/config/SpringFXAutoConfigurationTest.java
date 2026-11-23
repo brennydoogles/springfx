@@ -1,7 +1,8 @@
 package com.brendondugan.springfx.internal.config;
 
 import com.brendondugan.springfx.WindowSettings;
-import com.brendondugan.springfx.internal.jfx.PrimaryWindow;
+import com.brendondugan.springfx.WindowManager;
+import com.brendondugan.springfx.internal.jfx.FxWindowManager;
 import com.brendondugan.springfx.internal.jfx.ViewLoader;
 import com.brendondugan.springfx.internal.spring.ControllerRegistry;
 import javafx.application.Platform;
@@ -58,7 +59,9 @@ class SpringFXAutoConfigurationTest {
         runner.run(context -> assertThat(context)
                 .hasSingleBean(ControllerRegistry.class)
                 .hasSingleBean(ViewLoader.class)
-                .hasSingleBean(PrimaryWindow.class));
+                .hasSingleBean(WindowSettingsResolver.class)
+                .hasSingleBean(FxWindowManager.class)
+                .hasSingleBean(WindowManager.class));
     }
 
     @Test
