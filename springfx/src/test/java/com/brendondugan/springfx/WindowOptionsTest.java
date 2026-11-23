@@ -30,12 +30,6 @@ class WindowOptionsTest {
     }
 
     @Test
-    void theBuilderAndTheWithersAgree() {
-        assertThat(WindowOptions.builder().modality(Modality.WINDOW_MODAL).title("Settings").width(480.0).height(320.0).build())
-                .isEqualTo(WindowOptions.defaults().withModality(Modality.WINDOW_MODAL).withTitle("Settings").withSize(480, 320));
-    }
-
-    @Test
     void toBuilderStartsFromExistingOptions() {
         WindowOptions titled = WindowOptions.builder().title("Settings").build();
 
@@ -46,6 +40,7 @@ class WindowOptionsTest {
     @Test
     void aNullModalityMeansNotModal() {
         assertThat(WindowOptions.builder().modality(null).build().modality()).isEqualTo(Modality.NONE);
-        assertThat(WindowOptions.defaults().withModality(null).modality()).isEqualTo(Modality.NONE);
+        assertThat(WindowOptions.builder().modality(Modality.WINDOW_MODAL).build().toBuilder().modality(null).build()
+                .modality()).isEqualTo(Modality.NONE);
     }
 }
