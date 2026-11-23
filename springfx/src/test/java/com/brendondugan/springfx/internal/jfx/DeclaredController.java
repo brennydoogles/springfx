@@ -4,7 +4,7 @@ import com.brendondugan.springfx.SpringFXController;
 import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;
 
-@SpringFXController("/fxml/declared.fxml")
+@SpringFXController(value = "/fxml/declared.fxml", viewName = "DECLARED")
 class DeclaredController {
 
     final GreetingService greetings;

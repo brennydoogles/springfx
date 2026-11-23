@@ -8,7 +8,7 @@ import javafx.stage.Stage;
  * a View in a new Window, or close one.
  *
  * <pre>{@code
- * @SpringFXController(value = "/fxml/main.fxml", primary = true)
+ * @SpringFXController(value = "/fxml/main.fxml", viewName = "MAIN", primary = true)
  * public class MainController {
  *     private final WindowManager windows;
  *
@@ -18,7 +18,7 @@ import javafx.stage.Stage;
  *
  *     @FXML
  *     private void onSettings() {
- *         windows.open(SettingsController.class, WindowOptions.builder()
+ *         windows.open(Views.SETTINGS, WindowOptions.builder()
  *                 .owner(windows.stageOf(this))
  *                 .modality(Modality.WINDOW_MODAL)
  *                 .build());
@@ -51,6 +51,19 @@ public interface WindowManager {
      * apply only to the Primary Window. Window Settings stylesheets and icons apply.
      */
     Stage open(Class<?> controllerType, WindowOptions options);
+
+    /**
+     * Shows the named View in a new Window with default options, and returns its stage. The
+     * {@code Views} enum that {@code springfx-processor} generates supplies View Names.
+     */
+    default Stage open(ViewName view) {
+        return open(view.controllerType());
+    }
+
+    /** Shows the named View in a new Window, as {@link #open(Class, WindowOptions)} does. */
+    default Stage open(ViewName view, WindowOptions options) {
+        return open(view.controllerType(), options);
+    }
 
     /**
      * The stage of the Window showing the given Controller's View. Works for the Controllers of

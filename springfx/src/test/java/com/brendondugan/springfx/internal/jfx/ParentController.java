@@ -3,7 +3,7 @@ package com.brendondugan.springfx.internal.jfx;
 import com.brendondugan.springfx.SpringFXController;
 import javafx.fxml.FXML;
 
-@SpringFXController(value = "/fxml/parent.fxml", title = "Parent title")
+@SpringFXController(value = "/fxml/parent.fxml", title = "Parent title", viewName = "PARENT")
 class ParentController {
 
     @FXML

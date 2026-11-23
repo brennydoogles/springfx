@@ -2,6 +2,6 @@ package com.brendondugan.springfx.internal.jfx;
 
 import com.brendondugan.springfx.SpringFXController;
 
-@SpringFXController("/fxml/mismatched.fxml")
+@SpringFXController(value = "/fxml/mismatched.fxml", viewName = "MISMATCHED")
 class MismatchedController {
 }

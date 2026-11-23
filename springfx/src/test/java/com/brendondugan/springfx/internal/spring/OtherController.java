@@ -2,6 +2,6 @@ package com.brendondugan.springfx.internal.spring;
 
 import com.brendondugan.springfx.SpringFXController;
 
-@SpringFXController("/fxml/other.fxml")
+@SpringFXController(value = "/fxml/other.fxml", viewName = "OTHER")
 class OtherController {
 }

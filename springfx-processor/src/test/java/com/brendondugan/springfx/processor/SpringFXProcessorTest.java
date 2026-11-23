@@ -29,7 +29,7 @@ class SpringFXProcessorTest {
 
             import com.brendondugan.springfx.SpringFXController;
 
-            @SpringFXController(value = "/fxml/main.fxml", primary = true)
+            @SpringFXController(value = "/fxml/main.fxml", primary = true, viewName = "MAIN")
             public class MainController {
             }
             """;
@@ -39,11 +39,13 @@ class SpringFXProcessorTest {
 
     private Path resources;
     private Path classOutput;
+    private Path generated;
 
     @BeforeEach
     void folders() throws IOException {
         resources = Files.createDirectories(work.resolve("resources"));
         classOutput = work.resolve("classes");
+        generated = work.resolve("generated");
     }
 
     @Test
@@ -59,7 +61,7 @@ class SpringFXProcessorTest {
 
                         import com.brendondugan.springfx.SpringFXController;
 
-                        @SpringFXController(fxml = "/fxml/settings.fxml", title = "Settings")
+                        @SpringFXController(fxml = "/fxml/settings.fxml", title = "Settings", viewName = "SETTINGS")
                         public class SettingsController {
                         }
                         """)
@@ -101,7 +103,7 @@ class SpringFXProcessorTest {
 
                 import com.brendondugan.springfx.SpringFXController;
 
-                @SpringFXController(value = "/fxml/main.fxml", primary = true)
+                @SpringFXController(value = "/fxml/main.fxml", primary = true, viewName = "SECOND")
                 public class SecondController {
                 }
                 """;
@@ -128,7 +130,7 @@ class SpringFXProcessorTest {
 
                         import com.brendondugan.springfx.SpringFXController;
 
-                        @SpringFXController("/fxml/settings.fxml")
+                        @SpringFXController(value = "/fxml/settings.fxml", viewName = "SETTINGS")
                         public class SettingsController {
                         }
                         """)
@@ -150,7 +152,7 @@ class SpringFXProcessorTest {
 
                         import com.brendondugan.springfx.SpringFXController;
 
-                        @SpringFXController("/fxml/settings.fxml")
+                        @SpringFXController(value = "/fxml/settings.fxml", viewName = "SETTINGS")
                         public class SettingsController {
                         }
                         """)
@@ -181,7 +183,7 @@ class SpringFXProcessorTest {
 
                         import com.brendondugan.springfx.SpringFXController;
 
-                        @SpringFXController(value = "/fxml/main.fxml", primary = true)
+                        @SpringFXController(value = "/fxml/main.fxml", primary = true, viewName = "SECOND")
                         public class SecondController {
                         }
                         """)
@@ -210,14 +212,14 @@ class SpringFXProcessorTest {
         Files.createDirectories(copied.getParent());
         Files.writeString(copied, fxmlContent("demo.OtherController"));
 
-        CompilationResult result = new TestCompiler(classOutput).source("demo.MainController", MAIN_CONTROLLER).compile();
+        CompilationResult result = new TestCompiler(classOutput).viewsPackage("demo").source("demo.MainController", MAIN_CONTROLLER).compile();
 
         assertThat(result.errorMessages()).singleElement().asString().contains("demo.OtherController");
     }
 
     @Test
     void aMissingFxmlInTheClassOutputSuggestsTheResourcesOption() {
-        CompilationResult result = new TestCompiler(classOutput).source("demo.MainController", MAIN_CONTROLLER).compile();
+        CompilationResult result = new TestCompiler(classOutput).viewsPackage("demo").source("demo.MainController", MAIN_CONTROLLER).compile();
 
         assertThat(result.errorMessages()).singleElement().asString()
                 .contains("the class output", "-Aspringfx.resources");
@@ -233,7 +235,7 @@ class SpringFXProcessorTest {
 
                         import com.brendondugan.springfx.SpringFXController;
 
-                        @SpringFXController("views/settings.fxml")
+                        @SpringFXController(value = "views/settings.fxml", viewName = "SETTINGS")
                         public class SettingsController {
                         }
                         """)
@@ -253,7 +255,7 @@ class SpringFXProcessorTest {
                         import com.brendondugan.springfx.SpringFXController;
 
                         public class Outer {
-                            @SpringFXController("/fxml/inner.fxml")
+                            @SpringFXController(value = "/fxml/inner.fxml", viewName = "INNER")
                             public static class Inner {
                             }
                         }
@@ -271,7 +273,7 @@ class SpringFXProcessorTest {
 
                         import com.brendondugan.springfx.SpringFXController;
 
-                        @SpringFXController
+                        @SpringFXController(viewName = "BLANK")
                         public class BlankController {
                         }
                         """)
@@ -313,8 +315,9 @@ class SpringFXProcessorTest {
         assertThat(result.errorMessages()).singleElement().asString().contains("/fxml/main.fxml", "not found");
     }
 
+    /** A compiler for a module whose Views go in package demo, so no application class is needed. */
     private TestCompiler compiler() {
-        return new TestCompiler(classOutput).resources(resources);
+        return new TestCompiler(classOutput).resources(resources).generatedSources(generated).viewsPackage("demo");
     }
 
     private void fxml(String resource, String fxController) throws IOException {

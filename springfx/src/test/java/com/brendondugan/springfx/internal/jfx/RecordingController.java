@@ -2,7 +2,7 @@ package com.brendondugan.springfx.internal.jfx;
 
 import com.brendondugan.springfx.SpringFXController;
 
-@SpringFXController("/fxml/recording.fxml")
+@SpringFXController(value = "/fxml/recording.fxml", viewName = "RECORDING")
 class RecordingController {
 
     RecordingController(ControllerLog log) {

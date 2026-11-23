@@ -28,6 +28,7 @@ class TestCompiler {
     private final List<String> options = new ArrayList<>();
     private String classPath = System.getProperty("java.class.path");
     private Path processorPath;
+    private Path generatedSources;
 
     TestCompiler(Path classOutput) {
         this.classOutput = classOutput;
@@ -40,6 +41,17 @@ class TestCompiler {
 
     TestCompiler resources(Path folder) {
         options.add("-A" + SpringFXProcessor.RESOURCES_OPTION + "=" + folder);
+        return this;
+    }
+
+    TestCompiler viewsPackage(String pkg) {
+        options.add("-A" + SpringFXProcessor.VIEWS_PACKAGE_OPTION + "=" + pkg);
+        return this;
+    }
+
+    /** Where generated sources such as Views are written, so tests can read them. */
+    TestCompiler generatedSources(Path folder) {
+        this.generatedSources = folder;
         return this;
     }
 
@@ -62,6 +74,10 @@ class TestCompiler {
             List<String> args = new ArrayList<>(options);
             args.addAll(List.of("-d", classOutput.toString(),
                     "-classpath", classPath + File.pathSeparator + classOutput));
+            if (generatedSources != null) {
+                Files.createDirectories(generatedSources);
+                args.addAll(List.of("-s", generatedSources.toString()));
+            }
             if (processorPath != null) {
                 args.addAll(List.of("--processor-path", processorPath.toString()));
             }

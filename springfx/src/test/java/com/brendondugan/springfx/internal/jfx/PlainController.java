@@ -4,7 +4,7 @@ import com.brendondugan.springfx.SpringFXController;
 import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;
 
-@SpringFXController(value = "/fxml/plain.fxml", primary = true)
+@SpringFXController(value = "/fxml/plain.fxml", primary = true, viewName = "PLAIN")
 class PlainController {
 
     final GreetingService greetings;
