@@ -13,4 +13,34 @@
     <artifactId>springfx-processor</artifactId>
     <name>SpringFX Processor</name>
     <description>Compile-time checks for SpringFX Controllers and their FXML (ADR-0003)</description>
+
+    <!-- No runtime dependencies: the processor names SpringFX's types as strings, so a consumer's
+         processor path needs only this jar. -->
+    <dependencies>
+        <!-- Tests compile sample Controllers, which need SpringFX's annotation and base class. -->
+        <dependency>
+            <groupId>com.github.brennydoogles.springfx</groupId>
+            <artifactId>springfx</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <!-- Don't run any processor, this one included, while compiling the processor. -->
+                    <proc>none</proc>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
