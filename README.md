@@ -82,7 +82,7 @@ If startup fails (no primary Controller, or a View that can't load), the cause i
 ## 3. Write Controllers and their FXML
 
 ```java
-@SpringFXController(value = "/fxml/main.fxml", primary = true)
+@SpringFXController(value = "/fxml/main.fxml", viewName = "MAIN", primary = true)
 public class MainController {
     private final GreetingService greetings;
 
@@ -115,6 +115,7 @@ public class MainController {
 | Attribute | Default | Meaning |
 |---|---|---|
 | `value` (or `fxml`) | required | The View's FXML, as a class-path resource. A path starting with `/` is absolute; any other path is relative to the Controller's package. |
+| `viewName` | required | The View's View Name, such as `LOGIN_PAGE`: `UPPER_SNAKE_CASE` and unique within the module. It becomes a constant of the generated `Views` enum. |
 | `primary` | `false` | Whether this is the Primary View. Exactly one Controller in an app is primary. |
 | `title` | `""` | The title of a Window showing this View. Empty means `springfx.window.title`. |
 
@@ -162,7 +163,7 @@ A Window's title is the first that is set of:
 **`WindowManager`** is a singleton bean: inject it into a Controller for everything about Windows that happens outside FXML.
 
 ```java
-@SpringFXController(value = "/fxml/settings.fxml", title = "Settings")
+@SpringFXController(value = "/fxml/settings.fxml", viewName = "SETTINGS", title = "Settings")
 public class SettingsController {
     private final WindowManager windows;
 
@@ -178,7 +179,7 @@ public class SettingsController {
 }
 
 // In MainController: open Settings as a dialog owned by the main Window.
-windows.open(SettingsController.class, WindowOptions.builder()
+windows.open(Views.SETTINGS, WindowOptions.builder()
         .owner(windows.stageOf(this))
         .modality(Modality.WINDOW_MODAL)
         .width(480.0)
@@ -189,7 +190,8 @@ windows.open(SettingsController.class, WindowOptions.builder()
 | Method | Does |
 |---|---|
 | `primaryStage()` | The Primary Window's stage |
-| `open(type)`, `open(type, options)` | Shows that Controller's View in a new Window and returns its stage. Each call makes a fresh Controller. |
+| `open(view)`, `open(view, options)` | Shows the View with that View Name, such as `Views.SETTINGS`, in a new Window and returns its stage. Each call makes a fresh Controller. |
+| `open(type)`, `open(type, options)` | The same, naming the View by its Controller class |
 | `stageOf(controller)` | The Window a Controller's View is in, including the Controllers of nested `<fx:include>`s |
 | `close(controller)` | Closes that Controller's Window. Closing the Primary Window ends the app. |
 
@@ -202,6 +204,20 @@ windows.open(SettingsController.class, WindowOptions.builder()
 | `title` | none | The new Window's title, which wins over the Controller's |
 | `width`, `height` | the View's preferred size | The new Window's content size |
 
+### Views
+
+`springfx-processor` generates a `Views` enum with one constant per View Name, sorted alphabetically, so you can type `Views.` and pick a View ([ADR-0004](docs/adr/0004-view-names-are-a-generated-enum.md)):
+
+```java
+windows.open(Views.LOGIN_PAGE);
+```
+
+Each constant implements SpringFX's `ViewName` interface; `controllerType()` returns its Controller class.
+
+- **Where it goes.** `Views` is generated in the package of the module's `SpringFXApplication` subclass. Set `-Aspringfx.viewsPackage=<package>` to put it elsewhere. A module with Controllers but no application class, or with application classes in different packages, must set the option.
+- **Generated at compile time.** It's written to `target/generated-sources/annotations`, which IntelliJ and other IDEs treat as a source folder. A new or renamed View Name shows up in the IDE after the next build.
+- **Needs the processor.** Without `springfx-processor` on `annotationProcessorPaths`, there is no `Views`.
+
 Every `WindowManager` method can be called from any thread. Calls off the JavaFX application thread run on it; the methods that return a value wait for it, and `close` doesn't.
 
 ## 6. Let the compiler check your Controllers
@@ -209,15 +225,19 @@ Every `WindowManager` method can be called from any thread. Calls off the JavaFX
 With `springfx-processor` configured as in step 1, these are compile errors, reported on the Controller's `@SpringFXController`:
 
 - the FXML file it names doesn't exist, or it names none
+- its View Name isn't `UPPER_SNAKE_CASE`, or another Controller in the module has the same one
+- `Views` couldn't refer to it, because it's package-private (or nested in a non-public class) in another package
 - the FXML's `fx:controller` names a different class (leaving `fx:controller` out is fine)
 - more than one Controller is `primary = true`
 - the module has a `SpringFXApplication` subclass but no primary Controller
 
 **Telling it where FXML lives.** `-Aspringfx.resources` gives the folder or folders that hold your FXML; separate several with the platform path separator. Without it, the processor reads FXML from the class output. That works in a Maven build, where resources are copied before compiling, but can miss files an IDE hasn't copied yet.
 
+**Where `Views` goes.** `-Aspringfx.viewsPackage` sets the package of the generated `Views` (see [Views](#views)).
+
 **What it reads.** Only each FXML file's root element.
 
-**IDE incremental builds.** These recompile only the changed files. To keep the primary-Controller checks right there, the processor records the primary Controller in `META-INF/springfx/primary-controllers` in the class output.
+**IDE incremental builds.** These recompile only the changed files. To keep the primary-Controller checks right there, the processor records the module's Controllers and application classes in `META-INF/springfx/module-index` in the class output. Each build then checks the primary Controller and writes the complete `Views` even when it recompiles only some files.
 
 ## Testing your app
 

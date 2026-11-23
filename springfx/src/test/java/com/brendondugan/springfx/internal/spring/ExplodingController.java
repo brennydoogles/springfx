@@ -3,7 +3,7 @@ package com.brendondugan.springfx.internal.spring;
 import com.brendondugan.springfx.SpringFXController;
 
 /** A Controller that fails if anything creates it. */
-@SpringFXController("/fxml/exploding.fxml")
+@SpringFXController(value = "/fxml/exploding.fxml", viewName = "EXPLODING")
 class ExplodingController {
 
     ExplodingController() {

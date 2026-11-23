@@ -19,7 +19,7 @@ import java.lang.annotation.Target;
  * names, but if it does it must name the annotated class (ADR-0003).
  *
  * <pre>{@code
- * @SpringFXController(value = "/fxml/main.fxml", primary = true)
+ * @SpringFXController(value = "/fxml/main.fxml", viewName = "MAIN", primary = true)
  * public class MainController { ... }
  * }</pre>
  */
@@ -44,6 +44,14 @@ public @interface SpringFXController {
      */
     @AliasFor("value")
     String fxml() default "";
+
+    /**
+     * The View's View Name, such as {@code LOGIN_PAGE}: {@code UPPER_SNAKE_CASE} and unique within
+     * the module. {@code springfx-processor} turns each into a constant of the generated
+     * {@code Views} enum, so the View can be opened with {@code windows.open(Views.LOGIN_PAGE)}
+     * (ADR-0004).
+     */
+    String viewName();
 
     /** Whether this Controller's View is the Primary View. Exactly one Controller is primary. */
     boolean primary() default false;
