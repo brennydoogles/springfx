@@ -1,6 +1,6 @@
 package com.brendondugan.springfx;
 
-import com.brendondugan.springfx.internal.FxApplication;
+import com.brendondugan.springfx.internal.jfx.FxApplication;
 
 /**
  * Base class for the SpringFX Application: the consuming app's single entry-point class.

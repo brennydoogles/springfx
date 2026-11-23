@@ -1,6 +1,7 @@
-package com.brendondugan.springfx.internal;
+package com.brendondugan.springfx.internal.jfx;
 
 import com.brendondugan.springfx.WindowSettings;
+import com.brendondugan.springfx.internal.config.ApplicationNameProperties;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -11,7 +12,7 @@ import java.net.URL;
 import java.util.List;
 
 /** Shows the Primary View in the Primary Window, applying the Window Settings. */
-class PrimaryWindow {
+public class PrimaryWindow {
 
     private static final String DEFAULT_TITLE = "Application";
 
@@ -19,7 +20,7 @@ class PrimaryWindow {
     private final WindowSettings settings;
     private final ApplicationNameProperties application;
 
-    PrimaryWindow(ViewLoader viewLoader, WindowSettings settings, ApplicationNameProperties application) {
+    public PrimaryWindow(ViewLoader viewLoader, WindowSettings settings, ApplicationNameProperties application) {
         this.viewLoader = viewLoader;
         this.settings = settings;
         this.application = application;

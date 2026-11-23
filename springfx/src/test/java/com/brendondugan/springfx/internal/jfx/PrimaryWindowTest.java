@@ -1,6 +1,7 @@
-package com.brendondugan.springfx.internal;
+package com.brendondugan.springfx.internal.jfx;
 
 import com.brendondugan.springfx.WindowSettings;
+import com.brendondugan.springfx.internal.config.ApplicationNameProperties;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

@@ -1,6 +1,10 @@
-package com.brendondugan.springfx.internal;
+package com.brendondugan.springfx.internal.config;
 
 import com.brendondugan.springfx.WindowSettings;
+import com.brendondugan.springfx.internal.jfx.FxApplication;
+import com.brendondugan.springfx.internal.jfx.PrimaryWindow;
+import com.brendondugan.springfx.internal.jfx.ViewLoader;
+import com.brendondugan.springfx.internal.spring.ControllerRegistry;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;

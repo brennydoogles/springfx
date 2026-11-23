@@ -1,6 +1,9 @@
-package com.brendondugan.springfx.internal;
+package com.brendondugan.springfx.internal.config;
 
 import com.brendondugan.springfx.WindowSettings;
+import com.brendondugan.springfx.internal.jfx.PrimaryWindow;
+import com.brendondugan.springfx.internal.jfx.ViewLoader;
+import com.brendondugan.springfx.internal.spring.ControllerRegistry;
 import javafx.application.Platform;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
@@ -51,13 +54,16 @@ class SpringFXAutoConfigurationTest {
     }
 
     @Test
-    void creatingTheContextDoesNotStartTheJavaFxToolkit() {
-        runner.withBean(GreetingService.class).withBean(PlainController.class)
-                .run(context -> {
-                    context.getBean(ViewLoader.class).load(PlainController.class);
+    void registersSpringFXsBeans() {
+        runner.run(context -> assertThat(context)
+                .hasSingleBean(ControllerRegistry.class)
+                .hasSingleBean(ViewLoader.class)
+                .hasSingleBean(PrimaryWindow.class));
+    }
 
-                    assertThatIllegalStateException().isThrownBy(() -> Platform.runLater(() -> { }))
-                            .withMessageContaining("Toolkit not initialized");
-                });
+    @Test
+    void creatingTheContextDoesNotStartTheJavaFxToolkit() {
+        runner.run(context -> assertThatIllegalStateException().isThrownBy(() -> Platform.runLater(() -> { }))
+                .withMessageContaining("Toolkit not initialized"));
     }
 }

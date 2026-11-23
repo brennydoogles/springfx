@@ -1,4 +1,4 @@
-package com.brendondugan.springfx.internal;
+package com.brendondugan.springfx.internal.jfx;
 
 import com.brendondugan.springfx.SpringFXController;
 

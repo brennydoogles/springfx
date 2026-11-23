@@ -1,5 +1,7 @@
-package com.brendondugan.springfx.internal;
+package com.brendondugan.springfx.internal.jfx;
 
+import com.brendondugan.springfx.internal.config.SpringFXAutoConfiguration;
+import javafx.application.Platform;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
@@ -83,6 +85,16 @@ class ViewLoaderTest {
                 .isThrownBy(() -> context.getBean(ViewLoader.class).load(MissingFxmlController.class))
                 .withMessageContaining("/fxml/missing.fxml")
                 .withMessageContaining(MissingFxmlController.class.getName()));
+    }
+
+    @Test
+    void loadingAViewDoesNotStartTheJavaFxToolkit() {
+        runner.run(context -> {
+            context.getBean(ViewLoader.class).load(PlainController.class);
+
+            assertThatIllegalStateException().isThrownBy(() -> Platform.runLater(() -> { }))
+                    .withMessageContaining("Toolkit not initialized");
+        });
     }
 
     @Test
